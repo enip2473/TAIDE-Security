@@ -6,9 +6,7 @@ class TAIDEAI:
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name, 
-            torch_dtype=torch.float16,
             device_map='auto',
-            load_in_8bit=True
         )
         self.text_generator = pipeline("text-generation", model=self.model, tokenizer=self.tokenizer)
 
@@ -25,7 +23,7 @@ class TAIDEAI:
     def create_prompt(self, sys, user):
         chat = [
             {"role": "system", "content": sys},
-            {"role": "user", "content": user}
+            {"role": "user", "content": f"輸入：{user}\n你的回答："}
         ]
         prompt = self.tokenizer.apply_chat_template(chat, tokenize=False)
         return prompt
