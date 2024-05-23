@@ -2,7 +2,7 @@ import csv
 from datasets import load_dataset
 from openai_api.gpt import discrimination_rating
 from model.taide import TAIDEAI
-from config import summarize_prompt
+from config import summarize_prompt, article_prompt
 from tqdm import tqdm
 
 def main():
@@ -10,10 +10,10 @@ def main():
     dataset = load_dataset("enip2473/toxigen-data-tw")
     taide_ai = TAIDEAI()
 
-    system_prompt = summarize_prompt
+    system_prompt = article_prompt
 
     # Open a CSV file to store the results
-    with open('../result/summarize.csv', mode='w', newline='', encoding='utf-8') as file:
+    with open('../result/article.csv', mode='w', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
         # Write the header row
         writer.writerow(['Prompt', 'Response', 'Discrimination Rating'])

@@ -3,12 +3,10 @@ import torch
 
 class TAIDEAI:
     def __init__(self, model_name="taide/TAIDE-LX-7B-Chat"):
-        config = {"load_in_8bit": True}
         self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name, 
             torch_dtype=torch.float16,
-            low_cpu_mem_usage=True,
             device_map='auto',
             load_in_8bit=True
         )
