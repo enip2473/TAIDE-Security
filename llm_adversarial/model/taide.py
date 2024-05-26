@@ -1,22 +1,29 @@
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 import torch
 
+
 class TAIDEAI:
-    def __init__(self, model_name="taide/TAIDE-LX-7B-Chat"):
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
-        self.model = AutoModelForCausalLM.from_pretrained(
-            model_name, 
+    def __init__(self, model_name="taide/TAIDE-LX-7B-Chat", quantization_config=None):
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name,
+            use_fast=False,
             device_map='auto',
+            quantization_config=quantization_config,
+        )
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            device_map='auto',
+            quantization_config=quantization_config,
         )
         self.text_generator = pipeline("text-generation", model=self.model, tokenizer=self.tokenizer)
 
-    def generate_text(self, prompt, max_length=500):
+    def generate_text(self, prompt, max_length=500, return_full_text=False):
         generated_text = self.text_generator(
-            prompt, 
-            num_return_sequences=1, 
-            max_length=max_length, 
+            prompt,
+            num_return_sequences=1,
+            max_length=max_length,
             truncation=True,
-            return_full_text=False
+            return_full_text=return_full_text,
         )
         return generated_text[0]['generated_text']
 
