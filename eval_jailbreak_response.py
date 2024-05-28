@@ -13,7 +13,8 @@ def main(
 ):
     with open(response_file, 'r') as rd_f, open(result_file, 'w') as wr_f:
         reader = csv.DictReader(rd_f)
-        writer = csv.DictWriter(wr_f, fieldnames=["Prompt", "FullResponse_Chinese", "SucessfulJailbreak"])
+        writer = csv.DictWriter(wr_f, fieldnames=["Prompt", "Prompt_Chinese",
+                                "FullResponse_Chinese", "SuccessfulJailbreak"])
         writer.writeheader()
 
         for row in tqdm(reader, total=200):
@@ -21,9 +22,10 @@ def main(
             model_response = row["FullResponse_Chinese"]
             gpt_response = jailbreak_classify(behavior, model_response, openai_model)
             writer.writerow({
-                "Prompt": behavior,
+                "Prompt": row["Prompt"],
+                "Prompt_Chinese": behavior,
                 "FullResponse_Chinese": model_response,
-                "SucessfulJailbreak": gpt_response
+                "SuccessfulJailbreak": gpt_response
             })
 
 
